@@ -23,7 +23,6 @@ public class GameClient extends JComponent {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 
         init();
-
     }
 
     public void run() {

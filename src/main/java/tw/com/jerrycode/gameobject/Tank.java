@@ -58,28 +58,28 @@ public class Tank {
     // 為了避免上下或者左右一起按
     // 上下左右(0,1,2,3)
     private void determineDirection() {
-        // 上左
+        // 上左(0,2)
         if (dirs[0] && dirs[2] && !dirs[1] && !dirs[3]) {
             direction = Direction.UP_LEFT;
-            // 上右
+            // 上右(0,3)
         } else if (dirs[0] && !dirs[2] && !dirs[1] && dirs[3]) {
             direction = Direction.UP_RIGHT;
-            // 下左
+            // 下左(1,2)
         } else if (!dirs[0] && dirs[2] && dirs[1] && !dirs[3]) {
             direction = Direction.DOWN_LEFT;
-            // 下右
+            // 下右(1,3)
         } else if (!dirs[0] && !dirs[2] && dirs[1] && dirs[3]) {
             direction = Direction.DOWN_RIGHT;
-            // 上
+            // 上(0)
         } else if (dirs[0] && !dirs[2] && !dirs[1] && !dirs[3]) {
             direction = Direction.UP;
-            // 下
+            // 下(1)
         } else if (!dirs[0] && !dirs[2] && dirs[1] && !dirs[3]) {
             direction = Direction.DOWN;
-            // 左
+            // 左(2)
         } else if (!dirs[0] && dirs[2] && !dirs[1] && !dirs[3]) {
             direction = Direction.LEFT;
-            // 右
+            // 右(3)
         } else if (!dirs[0] && !dirs[2] && !dirs[1] && dirs[3]) {
             direction = Direction.RIGHT;
         }
@@ -155,9 +155,23 @@ public class Tank {
         }
     }
 
+    // 是否停止
+    public boolean isStop() {
+        for (boolean dir : dirs) {
+            if (dir) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public void draw(Graphics g) {
-        determineDirection();
-        move();
+        if (!isStop()) {
+            determineDirection();
+            move();
+        }
+
         g.drawImage(getImage(), x, y, null);
     }
 
