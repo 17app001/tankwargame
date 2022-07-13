@@ -10,6 +10,7 @@ public final class App extends JFrame {
         setTitle("坦克大戰");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
+
         GameClient gameClient = new GameClient();
         add(gameClient);
 

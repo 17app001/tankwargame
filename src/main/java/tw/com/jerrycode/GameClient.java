@@ -1,6 +1,6 @@
 package tw.com.jerrycode;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.awt.*;
 
 public class GameClient extends JComponent {
@@ -31,6 +31,15 @@ public class GameClient extends JComponent {
                 " screenWidth='" + getScreenWidth() + "'" +
                 ", screenHeight='" + getScreenHeight() + "'" +
                 "}";
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, screenWidth, screenHeight);
+
+        g.drawImage(new ImageIcon("assets/images/itankU.png").getImage(),
+                400, 400, null);
     }
 
 }
