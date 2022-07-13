@@ -8,15 +8,29 @@ public class Tank {
     private int y;
     private int speed;
     private boolean[] dirs;
+    private boolean enemy;
 
     private Direction direction;
 
-    public Tank(int x, int y, Direction direction) {
+    public Tank(int x, int y, Direction direction, boolean enemy) {
         this.x = x;
         this.y = y;
         this.direction = direction;
+        this.enemy = enemy;
         speed = 5;
         dirs = new boolean[4];
+    }
+
+    public void setDirs(boolean[] dirs) {
+        this.dirs = dirs;
+    }
+
+    public boolean getEnemy() {
+        return this.enemy;
+    }
+
+    public void setEnemy(boolean enemy) {
+        this.enemy = enemy;
     }
 
     public boolean[] getDirs() {
@@ -86,36 +100,39 @@ public class Tank {
     }
 
     public Image getImage() {
+
+        String name = enemy ? "etank" : "itank";
+
         if (direction == Direction.UP) {
-            return new ImageIcon("assets/images/itankU.png").getImage();
+            return new ImageIcon("assets/images/" + name + "U.png").getImage();
         }
 
         if (direction == Direction.DOWN) {
-            return new ImageIcon("assets/images/itankD.png").getImage();
+            return new ImageIcon("assets/images/" + name + "D.png").getImage();
         }
 
         if (direction == Direction.LEFT) {
-            return new ImageIcon("assets/images/itankL.png").getImage();
+            return new ImageIcon("assets/images/" + name + "L.png").getImage();
         }
 
         if (direction == Direction.RIGHT) {
-            return new ImageIcon("assets/images/itankR.png").getImage();
+            return new ImageIcon("assets/images/" + name + "R.png").getImage();
         }
 
         if (direction == Direction.UP_LEFT) {
-            return new ImageIcon("assets/images/itankLU.png").getImage();
+            return new ImageIcon("assets/images/" + name + "LU.png").getImage();
         }
 
         if (direction == Direction.UP_RIGHT) {
-            return new ImageIcon("assets/images/itankRU.png").getImage();
+            return new ImageIcon("assets/images/" + name + "RU.png").getImage();
         }
 
         if (direction == Direction.DOWN_LEFT) {
-            return new ImageIcon("assets/images/itankLD.png").getImage();
+            return new ImageIcon("assets/images/" + name + "LD.png").getImage();
         }
 
         if (direction == Direction.DOWN_RIGHT) {
-            return new ImageIcon("assets/images/itankRD.png").getImage();
+            return new ImageIcon("assets/images/" + name + "RD.png").getImage();
         }
 
         return null;
