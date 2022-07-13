@@ -41,6 +41,7 @@ public class GameClient extends JComponent {
 
     void init() {
         playerTank = new Tank(250, 250, Direction.UP);
+        playerTank.setSpeed(5);
     }
 
     public int getScreenWidth() {
@@ -52,25 +53,37 @@ public class GameClient extends JComponent {
     }
 
     public void keyPressed(KeyEvent e) {
+        boolean[] dirs = playerTank.getDirs();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                playerTank.setDirection(Direction.UP);
-                playerTank.setY(playerTank.getY() - 5);
+                dirs[0] = true;
                 break;
-
             case KeyEvent.VK_DOWN:
-                playerTank.setDirection(Direction.DOWN);
-                playerTank.setY(playerTank.getY() + 5);
+                dirs[1] = true;
                 break;
-
             case KeyEvent.VK_LEFT:
-                playerTank.setDirection(Direction.LEFT);
-                playerTank.setX(playerTank.getX() - 5);
+                dirs[2] = true;
                 break;
-
             case KeyEvent.VK_RIGHT:
-                playerTank.setDirection(Direction.RIGHT);
-                playerTank.setX(playerTank.getX() + 5);
+                dirs[3] = true;
+                break;
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {
+        boolean[] dirs = playerTank.getDirs();
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                dirs[0] = false;
+                break;
+            case KeyEvent.VK_DOWN:
+                dirs[1] = false;
+                break;
+            case KeyEvent.VK_LEFT:
+                dirs[2] = false;
+                break;
+            case KeyEvent.VK_RIGHT:
+                dirs[3] = false;
                 break;
         }
     }
@@ -80,7 +93,8 @@ public class GameClient extends JComponent {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, screenWidth, screenHeight);
 
-        g.drawImage(playerTank.getImage(), playerTank.getX(), playerTank.getY(), null);
+        playerTank.draw(g);
+
     }
 
 }

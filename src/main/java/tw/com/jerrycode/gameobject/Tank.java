@@ -6,12 +6,29 @@ import javax.swing.ImageIcon;
 public class Tank {
     private int x;
     private int y;
+    private int speed;
+    private boolean[] dirs;
+
     private Direction direction;
 
     public Tank(int x, int y, Direction direction) {
         this.x = x;
         this.y = y;
         this.direction = direction;
+        speed = 5;
+        dirs = new boolean[4];
+    }
+
+    public boolean[] getDirs() {
+        return dirs;
+    }
+
+    public int getSpeed() {
+        return this.speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     public int getX() {
@@ -38,6 +55,36 @@ public class Tank {
         this.direction = direction;
     }
 
+    // 為了避免上下或者左右一起按
+    // 上下左右(0,1,2,3)
+    private void determineDirection() {
+        // 上左
+        if (dirs[0] && dirs[2] && !dirs[1] && !dirs[3]) {
+            direction = Direction.UP_LEFT;
+            // 上右
+        } else if (dirs[0] && !dirs[2] && !dirs[1] && dirs[3]) {
+            direction = Direction.UP_RIGHT;
+            // 下左
+        } else if (!dirs[0] && dirs[2] && dirs[1] && !dirs[3]) {
+            direction = Direction.DOWN_LEFT;
+            // 下右
+        } else if (!dirs[0] && !dirs[2] && dirs[1] && dirs[3]) {
+            direction = Direction.DOWN_RIGHT;
+            // 上
+        } else if (dirs[0] && !dirs[2] && !dirs[1] && !dirs[3]) {
+            direction = Direction.UP;
+            // 下
+        } else if (!dirs[0] && !dirs[2] && dirs[1] && !dirs[3]) {
+            direction = Direction.DOWN;
+            // 左
+        } else if (!dirs[0] && dirs[2] && !dirs[1] && !dirs[3]) {
+            direction = Direction.LEFT;
+            // 右
+        } else if (!dirs[0] && !dirs[2] && !dirs[1] && dirs[3]) {
+            direction = Direction.RIGHT;
+        }
+    }
+
     public Image getImage() {
         if (direction == Direction.UP) {
             return new ImageIcon("assets/images/itankU.png").getImage();
@@ -55,7 +102,63 @@ public class Tank {
             return new ImageIcon("assets/images/itankR.png").getImage();
         }
 
+        if (direction == Direction.UP_LEFT) {
+            return new ImageIcon("assets/images/itankLU.png").getImage();
+        }
+
+        if (direction == Direction.UP_RIGHT) {
+            return new ImageIcon("assets/images/itankRU.png").getImage();
+        }
+
+        if (direction == Direction.DOWN_LEFT) {
+            return new ImageIcon("assets/images/itankLD.png").getImage();
+        }
+
+        if (direction == Direction.DOWN_RIGHT) {
+            return new ImageIcon("assets/images/itankRD.png").getImage();
+        }
+
         return null;
+    }
+
+    // 移動方法
+    public void move() {
+        switch (direction) {
+            case UP:
+                y -= speed;
+                break;
+            case DOWN:
+                y += speed;
+                break;
+            case LEFT:
+                x -= speed;
+                break;
+            case RIGHT:
+                x += speed;
+                break;
+            case UP_LEFT:
+                x -= speed;
+                y -= speed;
+                break;
+            case UP_RIGHT:
+                x += speed;
+                y -= speed;
+                break;
+            case DOWN_LEFT:
+                x -= speed;
+                y += speed;
+                break;
+            case DOWN_RIGHT:
+                x += speed;
+                y += speed;
+                break;
+        }
+    }
+
+    public void draw(Graphics g) {
+        determineDirection();
+        move();
+        g.drawImage(getImage(), x, y, null);
     }
 
 }
