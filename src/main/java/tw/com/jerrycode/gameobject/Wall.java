@@ -2,39 +2,18 @@ package tw.com.jerrycode.gameobject;
 
 import java.awt.*;
 
-public class Wall {
-    private int x;
-    private int y;
+public class Wall extends GameObject {
     // 是否水平
     private boolean horizontal;
     private int bricks;
-    // 圖片資源
-    private Image image;
 
     public Wall(Image image, int x, int y, boolean horizontal, int bricks) {
-        this.x = x;
-        this.y = y;
+        super(image, x, y);
         this.horizontal = horizontal;
         this.bricks = bricks;
-        this.image = image;
     }
 
-    public int getX() {
-        return this.x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return this.y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
+    @Override
     public void draw(Graphics g) {
         for (int i = 0; i < bricks; i++) {
             if (horizontal) {
@@ -44,4 +23,5 @@ public class Wall {
             }
         }
     }
+
 }

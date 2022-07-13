@@ -31,6 +31,7 @@ public class GameClient extends JComponent {
         init();
     }
 
+    // 啟動遊戲執行緒
     public void run() {
         new Thread(() -> {
             while (true) {
@@ -44,7 +45,7 @@ public class GameClient extends JComponent {
         }).start();
     }
 
-    // 讀取圖形
+    // 讀取圖形跟初始遊戲物件
     void init() {
         // 牆面圖形
         Image wallImg = new ImageIcon("assets/images/brick.png").getImage();
