@@ -26,14 +26,6 @@ public class GameClient extends JComponent {
     }
 
     @Override
-    public String toString() {
-        return "{" +
-                " screenWidth='" + getScreenWidth() + "'" +
-                ", screenHeight='" + getScreenHeight() + "'" +
-                "}";
-    }
-
-    @Override
     protected void paintComponent(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, screenWidth, screenHeight);

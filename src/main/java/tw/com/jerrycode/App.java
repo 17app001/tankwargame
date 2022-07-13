@@ -1,5 +1,6 @@
 package tw.com.jerrycode;
 
+import java.awt.event.*;
 import javax.swing.*;
 
 /**
@@ -16,6 +17,28 @@ public final class App extends JFrame {
 
         pack();
         setVisible(true);
+
+        // 遊戲區域重新繪製
+        gameClient.repaint();
+
+        // 按鍵偵測
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                System.out.println("press! " + e.getKeyChar());
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                System.out.println("release!");
+
+            }
+        });
     }
 
     /**
