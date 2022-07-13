@@ -1,13 +1,13 @@
 package tw.com.jerrycode;
 
 import javax.swing.*;
-
-import tw.com.jerrycode.gameobject.Direction;
-import tw.com.jerrycode.gameobject.Tank;
-import tw.com.jerrycode.gameobject.Wall;
-
 import java.awt.*;
 import java.awt.event.*;
+
+import tw.com.jerrycode.gameobject.Direction;
+import tw.com.jerrycode.gameobject.GameObject;
+import tw.com.jerrycode.gameobject.Tank;
+import tw.com.jerrycode.gameobject.Wall;
 import java.util.ArrayList;
 
 public class GameClient extends JComponent {
@@ -15,8 +15,7 @@ public class GameClient extends JComponent {
     private int screenHeight;
 
     private Tank playerTank;
-    private ArrayList<Tank> enemyTanks = new ArrayList<Tank>();
-    private ArrayList<Wall> walls = new ArrayList<Wall>();
+    private ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
 
     GameClient() {
         this(800, 600);
@@ -48,21 +47,33 @@ public class GameClient extends JComponent {
     // 讀取圖形跟初始遊戲物件
     void init() {
         // 牆面圖形
-        Image wallImg = new ImageIcon("assets/images/brick.png").getImage();
+        Image[] wallImg = { new ImageIcon("assets/images/brick.png").getImage() };
+        String[] ext = { "U", "D", "L", "R", "LU", "RU", "LD", "RD" };
+
+        Image[] iTankImg = new Image[ext.length];
+        Image[] eTankImg = new Image[ext.length];
+
+        // UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT
+        for (int i = 0; i < ext.length; i++) {
+            iTankImg[i] = new ImageIcon("assets/images/itank" + ext[i] + ".png").getImage();
+            eTankImg[i] = new ImageIcon("assets/images/etank" + ext[i] + ".png").getImage();
+        }
 
         // 玩家物件
-        playerTank = new Tank(380, 500, Direction.UP, false);
+        playerTank = new Tank(iTankImg, 380, 500, Direction.UP, false);
         playerTank.setSpeed(5);
+
+        gameObjects.add(playerTank);
         // 產生敵方
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 7; j++) {
-                enemyTanks.add(new Tank(200 + j * 60, 50 + i * 60, Direction.DOWN, true));
+                gameObjects.add(new Tank(eTankImg, 200 + j * 60, 50 + i * 60, Direction.DOWN, true));
             }
         }
         // 牆面配置
-        walls.add(new Wall(wallImg, 80, 10, false, 15));
-        walls.add(new Wall(wallImg, 140, 10, true, 10));
-        walls.add(new Wall(wallImg, 640, 10, false, 15));
+        gameObjects.add(new Wall(wallImg, 80, 10, false, 15));
+        gameObjects.add(new Wall(wallImg, 140, 10, true, 10));
+        gameObjects.add(new Wall(wallImg, 640, 10, false, 15));
     }
 
     public int getScreenWidth() {
@@ -113,15 +124,10 @@ public class GameClient extends JComponent {
     protected void paintComponent(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, screenWidth, screenHeight);
-        // 繪製玩家
-        playerTank.draw(g);
-        // 繪製敵方
-        for (Tank enemy : enemyTanks) {
-            enemy.draw(g);
-        }
-        // 繪製牆面
-        for (Wall wall : walls) {
-            wall.draw(g);
+
+        // 多型
+        for (GameObject object : gameObjects) {
+            object.draw(g);
         }
     }
 }

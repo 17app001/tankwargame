@@ -5,12 +5,17 @@ import java.awt.*;
 public abstract class GameObject {
     protected int x;
     protected int y;
-    protected Image image;
+    protected int width;
+    protected int height;
 
-    public GameObject(Image image, int x, int y) {
+    protected Image[] image;
+
+    public GameObject(Image[] image, int x, int y) {
         this.x = x;
         this.y = y;
         this.image = image;
+        width = image[0].getWidth(null);
+        height = image[0].getHeight(null);
     }
 
     public abstract void draw(Graphics g);
@@ -29,14 +34,5 @@ public abstract class GameObject {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public Image getImage() {
-        return this.image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
+    }   
 }
