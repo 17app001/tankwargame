@@ -67,13 +67,14 @@ public class GameClient extends JComponent {
 
         // 玩家物件
         playerTank = new Tank(iTankImg, 380, 500, Direction.UP, false);
-        playerTank.setSpeed(20);
+        playerTank.setSpeed(5);
 
         gameObjects.add(playerTank);
         // 產生敵方
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 7; j++) {
-                gameObjects.add(new Tank(eTankImg, 200 + j * 60, 50 + i * 60, Direction.DOWN, true));
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                gameObjects.add(new Tank(eTankImg, 200 + j * 100, 50 + i * (eTankImg[0].getHeight(null) + 47),
+                        Direction.DOWN, true));
             }
         }
 

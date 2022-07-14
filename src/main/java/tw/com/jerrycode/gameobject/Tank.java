@@ -99,6 +99,8 @@ public class Tank extends GameObject {
 
     // 移動方法
     public void move() {
+        oldX = x;
+        oldY = y;
         switch (direction) {
             case UP:
                 y -= speed;
@@ -130,18 +132,12 @@ public class Tank extends GameObject {
                 break;
         }
 
-        // 邊界偵測
-        if (x < 0) {
-            x = 0;
-        } else if (x > App.gameClient.getScreenWidth() - width) {
-            x = App.gameClient.getScreenWidth() - width;
-        }
+    }
 
-        if (y < 0) {
-            y = 0;
-        } else if (y > App.gameClient.getScreenHeight() - height) {
-            y = App.gameClient.getScreenHeight() - height;
-        }
+    @Override
+    public Rectangle getRectangle() {
+        int padding = 8;
+        return new Rectangle(x + padding, y + padding, width - padding, height - padding);
     }
 
     // 是否停止
@@ -155,12 +151,28 @@ public class Tank extends GameObject {
         return true;
     }
 
-    // 偵測敵方/牆面/子彈
+    // 偵測邊界/敵方/牆面/子彈
     public void collision() {
+        // 邊界偵測
+        if (x < 0) {
+            x = 0;
+        } else if (x > App.gameClient.getScreenWidth() - width) {
+            x = App.gameClient.getScreenWidth() - width;
+        }
+
+        if (y < 0) {
+            y = 0;
+        } else if (y > App.gameClient.getScreenHeight() - height) {
+            y = App.gameClient.getScreenHeight() - height;
+        }
+
+        // 偵測其他物件(使用多型)
         for (GameObject object : App.gameClient.getGameObjects()) {
             if (object != this) {
-                if (object instanceof Tank && getRectangle().intersects(object.getRectangle())) {
-                    System.out.println("hit!");
+                if (getRectangle().intersects(object.getRectangle())) {
+                    // 返回沒碰撞前的位置
+                    x = oldX;
+                    y = oldY;
                     return;
                 }
             }

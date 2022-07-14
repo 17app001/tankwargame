@@ -5,6 +5,8 @@ import java.awt.*;
 public abstract class GameObject {
     protected int x;
     protected int y;
+    protected int oldX;
+    protected int oldY;
     protected int width;
     protected int height;
 
