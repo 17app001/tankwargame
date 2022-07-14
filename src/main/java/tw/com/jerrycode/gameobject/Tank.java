@@ -6,19 +6,24 @@ import java.util.Random;
 import tw.com.jerrycode.App;
 
 public class Tank extends GameObject {
-    private int speed;
-    private boolean[] dirs;
-    private boolean enemy;
-
+    protected int speed;
+    protected boolean[] dirs;
+    protected boolean enemy;
     protected Direction direction;
     protected boolean iscollision;
+    protected int hp;
 
     public Tank(Image[] image, int x, int y, Direction direction, boolean enemy) {
         super(image, x, y);
         this.direction = direction;
         this.enemy = enemy;
-        speed = 5;
+        speed = 10;
         dirs = new boolean[4];
+        hp = 1;
+    }
+
+    public int getHP() {
+        return hp;
     }
 
     public boolean isEmeny() {
@@ -137,13 +142,19 @@ public class Tank extends GameObject {
                 y += speed;
                 break;
         }
-
     }
 
     @Override
     public Rectangle getRectangle() {
         int padding = 8;
         return new Rectangle(x + padding, y + padding, width - padding, height - padding);
+    }
+
+    public void getHurt(int damage) {
+        if (--hp <= 0) {
+            hp = 0;
+            alive = false;
+        }
     }
 
     // 是否停止
@@ -215,6 +226,10 @@ public class Tank extends GameObject {
 
     // 發射子彈
     public void fire() {
+        if (!alive) {
+            return;
+        }
+
         Bullet bullet = new Bullet(App.gameClient.getbulletImage(), 0, 0, direction, enemy);
         int[] pos = getCenterPos(bullet.getRectangle());
         bullet.setX(pos[0]);
@@ -244,22 +259,20 @@ public class Tank extends GameObject {
         if (!enemy) {
             return;
         }
-
+        // 是否碰撞
         if (iscollision) {
             getNewDirection();
             iscollision = false;
             return;
         }
-
+        // 進行亂數移動
         Random rand = new Random();
-
         // 移動
         if (rand.nextInt(50) == 1) {
             getNewDirection();
         }
-
         // 開火
-        if (rand.nextInt(100) == 1) {
+        if (rand.nextInt(10) == 1) {
             fire();
         }
     }
