@@ -9,6 +9,7 @@ public abstract class GameObject {
     protected int oldY;
     protected int width;
     protected int height;
+    protected boolean alive;
 
     protected Image[] image;
 
@@ -18,14 +19,29 @@ public abstract class GameObject {
         this.image = image;
         width = image[0].getWidth(null);
         height = image[0].getHeight(null);
+        alive = true;
+    }
+
+    public boolean getAlive() {
+        return alive;
     }
 
     public Rectangle getRectangle() {
         return new Rectangle(x, y, width, height);
+    }
 
+    public int[] getCenterPos(Rectangle rect) {
+        int[] pos = new int[2];
+
+        pos[0] = this.x + (width - rect.width) / 2;
+        pos[1] = this.y + (height - rect.height) / 2;
+
+        return pos;
     }
 
     public abstract void draw(Graphics g);
+
+    public abstract void ai();
 
     public int getX() {
         return this.x;

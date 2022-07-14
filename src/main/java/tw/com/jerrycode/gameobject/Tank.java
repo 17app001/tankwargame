@@ -1,6 +1,7 @@
 package tw.com.jerrycode.gameobject;
 
 import java.awt.*;
+import java.util.Random;
 
 import tw.com.jerrycode.App;
 
@@ -10,6 +11,7 @@ public class Tank extends GameObject {
     private boolean enemy;
 
     protected Direction direction;
+    protected boolean iscollision;
 
     public Tank(Image[] image, int x, int y, Direction direction, boolean enemy) {
         super(image, x, y);
@@ -17,6 +19,10 @@ public class Tank extends GameObject {
         this.enemy = enemy;
         speed = 5;
         dirs = new boolean[4];
+    }
+
+    public boolean isEmeny() {
+        return enemy;
     }
 
     public void setDirs(boolean[] dirs) {
@@ -151,19 +157,38 @@ public class Tank extends GameObject {
         return true;
     }
 
-    // 偵測邊界/敵方/牆面/子彈
-    public void collision() {
+    public boolean iscollisionBound() {
         // 邊界偵測
         if (x < 0) {
             x = 0;
-        } else if (x > App.gameClient.getScreenWidth() - width) {
+            return true;
+        }
+
+        if (x > App.gameClient.getScreenWidth() - width) {
             x = App.gameClient.getScreenWidth() - width;
+            return true;
         }
 
         if (y < 0) {
             y = 0;
-        } else if (y > App.gameClient.getScreenHeight() - height) {
+            return true;
+        }
+
+        if (y > App.gameClient.getScreenHeight() - height) {
             y = App.gameClient.getScreenHeight() - height;
+            return true;
+        }
+
+        return false;
+    }
+
+    // 偵測邊界/敵方/牆面/子彈
+    public void collision() {
+        if (iscollisionBound()) {
+            x = oldX;
+            y = oldY;
+            iscollision = true;
+            return;
         }
 
         // 偵測其他物件(使用多型)
@@ -184,18 +209,29 @@ public class Tank extends GameObject {
                 // 返回沒碰撞前的位置
                 x = oldX;
                 y = oldY;
+                iscollision = true;
                 return;
             }
-
         }
     }
 
     // 發射子彈
     public void fire() {
-        App.gameClient.getGameObjects().add(new Bullet(App.gameClient.getbulletImage(), x, y, direction, enemy));
+        Bullet bullet = new Bullet(App.gameClient.getbulletImage(), 0, 0, direction, enemy);
+        int[] pos = getCenterPos(bullet.getRectangle());
+        bullet.setX(pos[0]);
+        bullet.setY(pos[1]);
+
+        App.gameClient.getGameObjects().add(bullet);
     }
 
     public void draw(Graphics g) {
+        if (!alive) {
+            return;
+        }
+
+        ai();
+
         if (!isStop()) {
             determineDirection();
             move();
@@ -205,4 +241,51 @@ public class Tank extends GameObject {
         g.drawImage(image[direction.ordinal()], x, y, null);
     }
 
+    @Override
+    public void ai() {
+        if (!enemy) {
+            return;
+        }
+
+        if (iscollision) {
+            getNewDirection();
+            iscollision = false;
+            return;
+        }
+
+        Random rand = new Random();
+
+        // 移動
+        if (rand.nextInt(50) == 1) {
+            getNewDirection();
+        }
+
+        // 開火
+        if (rand.nextInt(100) == 1) {
+            fire();
+        }
+    }
+
+    public void getNewDirection() {
+        Random rand = new Random();
+        int dir = rand.nextInt(Direction.values().length);
+
+        if (dir <= Direction.RIGHT.ordinal()) {
+            dirs[dir] = true;
+        } else {
+            if (dir == Direction.UP_LEFT.ordinal()) {
+                dirs[0] = true;
+                dirs[2] = true;
+            } else if (dir == Direction.UP_RIGHT.ordinal()) {
+                dirs[0] = true;
+                dirs[3] = true;
+            } else if (dir == Direction.DOWN_LEFT.ordinal()) {
+                dirs[1] = true;
+                dirs[2] = true;
+            } else {
+                dirs[1] = true;
+                dirs[3] = true;
+            }
+        }
+    }
 }

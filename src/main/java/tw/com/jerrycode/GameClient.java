@@ -8,7 +8,7 @@ import tw.com.jerrycode.gameobject.Direction;
 import tw.com.jerrycode.gameobject.GameObject;
 import tw.com.jerrycode.gameobject.Tank;
 import tw.com.jerrycode.gameobject.Wall;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameClient extends JComponent {
     private int screenWidth;
@@ -16,7 +16,7 @@ public class GameClient extends JComponent {
 
     private Tank playerTank;
 
-    private ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
+    private CopyOnWriteArrayList<GameObject> gameObjects = new CopyOnWriteArrayList<GameObject>();
 
     private Image[] bulletImage;
 
@@ -38,7 +38,7 @@ public class GameClient extends JComponent {
     }
 
     // 回傳所有遊戲物件容器
-    public ArrayList<GameObject> getGameObjects() {
+    public CopyOnWriteArrayList<GameObject> getGameObjects() {
         return gameObjects;
     }
 
@@ -49,6 +49,7 @@ public class GameClient extends JComponent {
                 repaint();
                 try {
                     Thread.sleep(25);
+                    System.out.println(gameObjects.size());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -88,9 +89,9 @@ public class GameClient extends JComponent {
 
         // gameObjects.addAll(enemyTanks);
         // 牆面配置
-        gameObjects.add(new Wall(wallImg, 80, 10, false, 15));
-        gameObjects.add(new Wall(wallImg, 140, 10, true, 10));
-        gameObjects.add(new Wall(wallImg, 640, 10, false, 15));
+        // gameObjects.add(new Wall(wallImg, 80, 10, false, 15));
+        // gameObjects.add(new Wall(wallImg, 140, 10, true, 10));
+        // gameObjects.add(new Wall(wallImg, 640, 10, false, 15));
     }
 
     public int getScreenWidth() {
@@ -149,5 +150,12 @@ public class GameClient extends JComponent {
         for (GameObject object : gameObjects) {
             object.draw(g);
         }
+
+        for (GameObject object : gameObjects) {
+            if (!object.getAlive()) {
+                gameObjects.remove(object);
+            }
+        }
+
     }
 }
