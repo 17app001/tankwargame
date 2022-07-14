@@ -18,6 +18,11 @@ public abstract class GameObject {
         height = image[0].getHeight(null);
     }
 
+    public Rectangle getRectangle() {
+        return new Rectangle(x, y, width, height);
+
+    }
+
     public abstract void draw(Graphics g);
 
     public int getX() {
@@ -34,5 +39,5 @@ public abstract class GameObject {
 
     public void setY(int y) {
         this.y = y;
-    }   
+    }
 }

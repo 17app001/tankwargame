@@ -7,12 +7,15 @@ import javax.swing.*;
  * Hello world!
  */
 public final class App extends JFrame {
+    // 靜態唯一，可以直接取用
+    public static GameClient gameClient;
+
     private App() {
         setTitle("坦克大戰");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
-        GameClient gameClient = new GameClient();
+        gameClient = new GameClient();
         add(gameClient);
 
         pack();

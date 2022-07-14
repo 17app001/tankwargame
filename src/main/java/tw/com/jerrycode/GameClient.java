@@ -15,6 +15,7 @@ public class GameClient extends JComponent {
     private int screenHeight;
 
     private Tank playerTank;
+
     private ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
 
     GameClient() {
@@ -28,6 +29,11 @@ public class GameClient extends JComponent {
 
         // 遊戲初始
         init();
+    }
+
+    // 回傳所有遊戲物件
+    public ArrayList<GameObject> getGameObjects() {
+        return gameObjects;
     }
 
     // 啟動遊戲執行緒
@@ -61,7 +67,7 @@ public class GameClient extends JComponent {
 
         // 玩家物件
         playerTank = new Tank(iTankImg, 380, 500, Direction.UP, false);
-        playerTank.setSpeed(5);
+        playerTank.setSpeed(20);
 
         gameObjects.add(playerTank);
         // 產生敵方
@@ -70,6 +76,8 @@ public class GameClient extends JComponent {
                 gameObjects.add(new Tank(eTankImg, 200 + j * 60, 50 + i * 60, Direction.DOWN, true));
             }
         }
+
+        // gameObjects.addAll(enemyTanks);
         // 牆面配置
         gameObjects.add(new Wall(wallImg, 80, 10, false, 15));
         gameObjects.add(new Wall(wallImg, 140, 10, true, 10));

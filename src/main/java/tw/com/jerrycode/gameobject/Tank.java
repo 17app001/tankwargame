@@ -2,6 +2,8 @@ package tw.com.jerrycode.gameobject;
 
 import java.awt.*;
 
+import tw.com.jerrycode.App;
+
 public class Tank extends GameObject {
     private int speed;
     private boolean[] dirs;
@@ -127,6 +129,19 @@ public class Tank extends GameObject {
                 y += speed;
                 break;
         }
+
+        // 邊界偵測
+        if (x < 0) {
+            x = 0;
+        } else if (x > App.gameClient.getScreenWidth() - width) {
+            x = App.gameClient.getScreenWidth() - width;
+        }
+
+        if (y < 0) {
+            y = 0;
+        } else if (y > App.gameClient.getScreenHeight() - height) {
+            y = App.gameClient.getScreenHeight() - height;
+        }
     }
 
     // 是否停止
@@ -140,10 +155,23 @@ public class Tank extends GameObject {
         return true;
     }
 
+    // 偵測敵方/牆面/子彈
+    public void collision() {
+        for (GameObject object : App.gameClient.getGameObjects()) {
+            if (object != this) {
+                if (object instanceof Tank && getRectangle().intersects(object.getRectangle())) {
+                    System.out.println("hit!");
+                    return;
+                }
+            }
+        }
+    }
+
     public void draw(Graphics g) {
         if (!isStop()) {
             determineDirection();
             move();
+            collision();
         }
 
         g.drawImage(image[direction.ordinal()], x, y, null);
