@@ -185,8 +185,6 @@ public class Tank extends GameObject {
     // 偵測邊界/敵方/牆面/子彈
     public void collision() {
         if (iscollisionBound()) {
-            x = oldX;
-            y = oldY;
             iscollision = true;
             return;
         }
@@ -267,9 +265,10 @@ public class Tank extends GameObject {
     }
 
     public void getNewDirection() {
+        dirs = new boolean[4];
+
         Random rand = new Random();
         int dir = rand.nextInt(Direction.values().length);
-
         if (dir <= Direction.RIGHT.ordinal()) {
             dirs[dir] = true;
         } else {

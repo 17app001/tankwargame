@@ -76,6 +76,7 @@ public class GameClient extends JComponent {
 
         // 玩家物件
         playerTank = new Tank(iTankImg, 380, 500, Direction.UP, false);
+        // playerTank.setEnemy(true);
         playerTank.setSpeed(5);
 
         gameObjects.add(playerTank);
@@ -87,11 +88,10 @@ public class GameClient extends JComponent {
             }
         }
 
-        // gameObjects.addAll(enemyTanks);
         // 牆面配置
-        // gameObjects.add(new Wall(wallImg, 80, 10, false, 15));
-        // gameObjects.add(new Wall(wallImg, 140, 10, true, 10));
-        // gameObjects.add(new Wall(wallImg, 640, 10, false, 15));
+        gameObjects.add(new Wall(wallImg, 80, 10, false, 15));
+        gameObjects.add(new Wall(wallImg, 140, 10, true, 10));
+        gameObjects.add(new Wall(wallImg, 640, 10, false, 15));
     }
 
     public int getScreenWidth() {
