@@ -18,6 +18,8 @@ public class GameClient extends JComponent {
 
     private ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
 
+    private Image[] bulletImage;
+
     GameClient() {
         this(800, 600);
     }
@@ -31,7 +33,11 @@ public class GameClient extends JComponent {
         init();
     }
 
-    // 回傳所有遊戲物件
+    public Image[] getbulletImage() {
+        return bulletImage;
+    }
+
+    // 回傳所有遊戲物件容器
     public ArrayList<GameObject> getGameObjects() {
         return gameObjects;
     }
@@ -58,11 +64,13 @@ public class GameClient extends JComponent {
 
         Image[] iTankImg = new Image[ext.length];
         Image[] eTankImg = new Image[ext.length];
+        bulletImage = new Image[ext.length];
 
         // UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT
         for (int i = 0; i < ext.length; i++) {
             iTankImg[i] = new ImageIcon("assets/images/itank" + ext[i] + ".png").getImage();
             eTankImg[i] = new ImageIcon("assets/images/etank" + ext[i] + ".png").getImage();
+            bulletImage[i] = new ImageIcon("assets/images/missile" + ext[i] + ".png").getImage();
         }
 
         // 玩家物件
@@ -107,6 +115,9 @@ public class GameClient extends JComponent {
                 break;
             case KeyEvent.VK_RIGHT:
                 dirs[3] = true;
+                break;
+            case KeyEvent.VK_CONTROL:
+                playerTank.fire();
                 break;
         }
     }

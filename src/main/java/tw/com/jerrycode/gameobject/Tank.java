@@ -9,7 +9,7 @@ public class Tank extends GameObject {
     private boolean[] dirs;
     private boolean enemy;
 
-    private Direction direction;
+    protected Direction direction;
 
     public Tank(Image[] image, int x, int y, Direction direction, boolean enemy) {
         super(image, x, y);
@@ -168,15 +168,31 @@ public class Tank extends GameObject {
 
         // 偵測其他物件(使用多型)
         for (GameObject object : App.gameClient.getGameObjects()) {
-            if (object != this) {
-                if (getRectangle().intersects(object.getRectangle())) {
-                    // 返回沒碰撞前的位置
-                    x = oldX;
-                    y = oldY;
-                    return;
+            if (object == this) {
+                continue;
+            }
+
+            if (object instanceof Tank) {
+                // 向下轉型
+                if (((Tank) object).enemy == enemy) {
+                    continue;
                 }
             }
+
+            // 實際偵測碰撞
+            if (getRectangle().intersects(object.getRectangle())) {
+                // 返回沒碰撞前的位置
+                x = oldX;
+                y = oldY;
+                return;
+            }
+
         }
+    }
+
+    // 發射子彈
+    public void fire() {
+        App.gameClient.getGameObjects().add(new Bullet(App.gameClient.getbulletImage(), x, y, direction, enemy));
     }
 
     public void draw(Graphics g) {
